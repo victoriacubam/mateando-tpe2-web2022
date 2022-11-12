@@ -10,11 +10,18 @@ class ProductModel {
     }
 
     //Traigo todos los productos de la bbdd
-    function getAll() {
-        $query = $this->db->prepare("SELECT * FROM products");
-        $query->execute();
-
+    function getAll($sort = null, $order = null) {
+        if ($sort && $order){
+            $query = $this->db->prepare("SELECT * FROM products ORDER BY $sort $order");
+            $query->execute();
+        } else{ 
+            $query = $this->db->prepare("SELECT * FROM products");
+            $query->execute();
+        }
+        
+        
         $products = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de productos
+
         
         return $products;
     }

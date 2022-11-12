@@ -21,7 +21,23 @@
         }
     
         function getProducts($params = null){
-            $products = $this->model->getAll();
+            $products = null;
+            
+            $fields = array('id', 'name', 'id_brand', 'description', 'price', 'sale');
+            $orderType = array('desc', 'asc');
+            
+            if(isset($_GET['sort'])&&isset($_GET['order'])){
+                $sort = $_GET['sort'];
+                $order = $_GET['order'];
+                
+                if (in_array($sort, $fields)&&in_array($order, $orderType))  //Verifica que lo que se haya recibido por parametro GET pertenezca al array de opciones posibles
+                    $products = $this->model->getAll($sort, $order);   
+                else 
+                    return $this->view->response("La ruta es incorrecta", 400);  
+
+            } else
+                $products = $this->model->getAll();
+
             if ($products)
                 return $this->view->response($products);
             else 
@@ -82,4 +98,7 @@
             return $this->view->response("La ruta es incorrecta", 400);
         }
         
+
+
+
     }
