@@ -15,14 +15,14 @@
         Ejemplo ```GET /products?sort=sale&order=desc``` 
             este punto de entrada traera el listado de productos ordenado descendentemente por el campo `sale`, lo que significa que se listaran primero todos los productos que esten en oferta (sale = 1) y luego los que no (sale = 0).
 
-    - ### Paginacion
+    - #### Paginacion
 
         - `GET /products?limit=value&pag=value`
 
         A traves de los Query Params se pasa un limite que no puede exceder a la totalidad de registros de la tabla. Este limite establece la cantidad total de productos que se muestran por pagina, y para "recorrer" los registros se va aumentando el valor de la pagina. Si el limite no esta dentro de los posibles se producira un error ```400 Bad Request```.
 
         Ejemplo ```GET /products?limit=2&pag=1```
-            [
+            `[
                 {
                     "id": 1,
                     "name": "Producto 1",
@@ -41,9 +41,9 @@
                     "img": "img/63476aa6a7222.jpg",
                     "sale": 0
                 }
-            ]
+            ]`
 
-    - ### Filtrado
+    - #### Filtrado
         - `GET /products?field=value&value=value`
 
         Estableciendo un campo de la tabla es posible filtrar por algun valor en especifico. Es necesario que el campo que se pasa por el Query Param sea uno existente en la tabla, de lo contrario surgira un error ```400 Bad Request```. Y en el caso de que el valor que se busca filtrar no exista, ocurre un error ```404 Not Found```. 
