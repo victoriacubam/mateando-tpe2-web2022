@@ -14,10 +14,9 @@
         Agregando `?sort=FIELD&order=ORDERTYPE` permite ordenar la lista de manera ascendente o descendente por un campo. El campo se debe especificar en el `sort` y el orden deseado en el `order`. Solo es posible ordenar por campos existentes en la tabla de la base de datos, de lo contrario existira un `400 - Bad Request`.
 
 
-        Ejemplo ```GET /products?sort=sale&order=desc```
-
-
-            este punto de entrada traera el listado de productos ordenado descendentemente por el campo `sale`, lo que significa que se listaran primero todos los productos que esten en oferta (sale = 1) y luego los que no (sale = 0).
+        Ejemplo ```GET /products?sort=sale&order=desc```  
+        
+            Este punto de entrada traera el listado de productos ordenado descendentemente por el campo `sale`, lo que significa que se listaran primero todos los productos que esten en oferta (sale = 1) y luego los que no (sale = 0).
 
     - #### Paginacion
 
@@ -54,10 +53,8 @@
 
         Estableciendo un campo de la tabla es posible filtrar por algun valor en especifico. Es necesario que el campo que se pasa por el Query Param sea uno existente en la tabla, de lo contrario surgira un error `400 Bad Request`. Y en el caso de que el valor que se busca filtrar no exista, ocurre un error `404 Not Found`. 
 
-        Ejemplo `GET /products?field=sale&value=1`
-        
-
-            Esta peticion traera todos los productos que se encuentren en oferta, es decir, todos aquellos que tengan true (1) en el campo sale.
+        Ejemplo `GET /products?field=sale&value=1`  
+        Esta peticion traera todos los productos que se encuentren en oferta, es decir, todos aquellos que tengan true (1) en el campo sale.
 
     - #### Aclaraciones de las funcionalidades anteriores
     Lo detallado anteriormente (orden, filtro y paginacion) son funcionales unicamente en su uso individual, al combinarse se traera la lista de productos respetando el ultimo parametro especificado.
@@ -106,13 +103,13 @@
     Los nuevos valores de los campos del producto 123 seran los siguientes:  
 
 
-    {
+    ```{
         "name": "Prueba PUT",
         "id_brand": 1,
         "description": "Descripcion editada",
         "price": 50,
         "sale": 0
-    }
+    }```
 
 ***
 
