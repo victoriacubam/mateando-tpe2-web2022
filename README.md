@@ -16,7 +16,6 @@
 
         Ejemplo ```GET /products?sort=sale&order=desc```   
 
-
             este punto de entrada traera el listado de productos ordenado descendentemente por el campo `sale`, lo que significa que se listaran primero todos los productos que esten en oferta (sale = 1) y luego los que no (sale = 0).
 
     - #### Paginacion
@@ -28,7 +27,7 @@
         Ejemplo `GET /products?limit=2&pag=1`
 
 
-            ```[
+            [
                 {
                     "id": 1,
                     "name": "Producto 1",
@@ -47,24 +46,26 @@
                     "img": "img/63476aa6a7222.jpg",
                     "sale": 0
                 }
-            ]```
+            ]
 
     - #### Filtrado
         - `GET /products?field=value&value=value`
 
         Estableciendo un campo de la tabla es posible filtrar por algun valor en especifico. Es necesario que el campo que se pasa por el Query Param sea uno existente en la tabla, de lo contrario surgira un error `400 Bad Request`. Y en el caso de que el valor que se busca filtrar no exista, ocurre un error `404 Not Found`. 
 
-        Ejemplo `GET /products?field=sale&value=1`
-
+        Ejemplo `GET /products?field=sale&value=1`  
 
             Esta peticion traera todos los productos que se encuentren en oferta, es decir, todos aquellos que tengan true (1) en el campo sale.
 
+    - #### Aclaraciones de las funcionalidades anteriores
+    Lo detallado anteriormente (orden, filtro y paginacion) son funcionales unicamente en su uso individual, al combinarse se traera la lista de productos respetando el ultimo parametro especificado.
+
 - `GET /products/:ID`: Este endpoint permite acceder a un producto especifico de la tabla dado un id particular. En caso de que el id sea incorrecto, se producira un error `404 Not Found`. 
 
-- Ejemplo `GET /products/123`
+- Ejemplo `GET /products/123`  
 
 
-        ```{
+        {
             "id": 123,
             "name": "Producto prueba GET",
             "id_brand": 4,
@@ -72,43 +73,43 @@
             "price": 100,
             "img": null,
             "sale": 0
-        }```
+        }
 
 ***
 
 ## Servicio POST
 - `POST /products`: Este servicio permite agregar un nuevo producto a la tabla a traves del body de `postman`
 
-- Ejemplo `POST /products`
+- Ejemplo `POST /products`  
 
 
-        ```{
+        {
             "name": "Prueba POST",
             "id_brand": 1,
             "description": "Descripcion",
             "price": 100,
             "sale": 1
-        }```
+        }
 
 ***
 
 ## Servicio PUT
-- `PUT /products/:ID`
+- `PUT /products/:ID`  
     Por medio de este endpoint se puede hacer una modificacion a un producto existente en la tabla de la base de datos. Para especificar el producto a modificar se captura el ID que viene por parametro. Este ID debe existir en la tabla de lo contrario se arroja un status `404 Not Found`.
     La modificacion al igual que con `POST` se hace a traves del body de `postman`, respetando la estructura del objeto.
 
-- Ejemplo `PUT /products/123`
+- Ejemplo `PUT /products/123`  
 
 
-    Los nuevos valores de los campos del producto 123 seran los siguientes:
+    Los nuevos valores de los campos del producto 123 seran los siguientes:  
 
-    ```{
+    {
         "name": "Prueba PUT",
         "id_brand": 1,
         "description": "Descripcion editada",
         "price": 50,
         "sale": 0
-    }```
+    }
 
 ***
 
