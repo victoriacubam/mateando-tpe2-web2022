@@ -1,6 +1,7 @@
 <?php
 require_once 'libs/Router.php';
 require_once 'app/controllers/product-api.controller.php';
+require_once 'app/controllers/auth-api.controller.php';
 
 //Se instancia el router
 $router = new Router();
@@ -11,6 +12,9 @@ $router->addRoute('products/:ID', 'GET', 'ProductApiController', 'getProduct');
 $router->addRoute('products', 'POST', 'ProductApiController', 'insertProduct');
 $router->addRoute('products/:ID', 'DELETE', 'ProductApiController', 'deleteProduct');
 $router->addRoute('products/:ID', 'PUT', 'ProductApiController', 'editProduct');
+
+$router->addRoute('auth/token', 'GET', 'AuthApiController', 'getToken');
+
 $router->setDefaultRoute('ProductApiController', 'error');
 
 

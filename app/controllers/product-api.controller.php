@@ -1,16 +1,19 @@
 <?php
     require_once './app/models/product.model.php';
     require_once './app/views/api.view.php';
+    require_once './app/helpers/auth-api.helper.php';
     
     class ProductApiController {
         private $model;
         private $view;
+        private $authHelper;
         
         private $data;
 
         public function __construct(){
             $this->model = new ProductModel();
             $this->view = new ApiView();
+            $this->authHelper = new AuthApiHelper();
             
             //lee el body del request
             $this->data = file_get_contents("php://input");
@@ -25,60 +28,65 @@
             // Campos de la tabla
             $fields = array('id', 'name', 'id_brand', 'description', 'price', 'sale');
             // Tipos de orden
-            $orderType = array('desc', 'asc');
+            $orderType = array('asc','desc');
             // Total de registros de la tabla
             $total = $this->model->count();
-        
+            
+            //Defino valores por defecto
+            $sort = $fields[0];
+            $order = $orderType[0];
+            $limit = $total;
+            $offset = 0;
+            $field = null;
+            $value = null;
+            
+            //Filtrado
+            if ((isset($_GET['field'])&&isset($_GET['value']))){
+                $value = $_GET['value'];
+                // Verifica que lo que se haya recibido por parametro GET pertenezca al array de opciones posibles
+                if (in_array($_GET['field'], $fields))
+                    $field = $_GET['field'];
+                else 
+                    return $this->view->response("$field no es un campo existente en la tabla", 400);   
+            }
+
             //Ordenado por un campo asc o desc
             if ((isset($_GET['sort'])&&isset($_GET['order']))){
-        
-                $sort = $_GET['sort'];
-                $order = $_GET['order'];
-                
                 // Verifica que lo que se haya recibido por parametro GET pertenezca al array de opciones posibles
-                if (in_array($sort, $fields)&&in_array($order, $orderType))  
-                    $products = $this->model->getAllInOrder($sort, $order);   
+                if (in_array($sort, $fields)&&in_array($order, $orderType)){
+                    $sort = $_GET['sort'];
+                    $order = $_GET['order'];   
+                } 
                 else 
                     return $this->view->response("La ruta es incorrecta", 400);
-        
             } 
             
             //Paginacion
             if ((isset($_GET['limit'])&&(isset($_GET['pag'])))){
-                $total = $this->model->count();
-                $limit = (int)$_GET['limit'];
-                $page = (int)$_GET['pag'];
-                $pages = round($total/$limit);
-                
-                if(($limit <= $total) && ($page<=$pages)){
-                    $offset = $limit * ($page-1);
-                    $products = $this->model->getAllLimit($limit, $offset);
-                } else {
-                    return $this->view->response("El limite debe ser menor a $total y las paginas existentes son $pages", 400);
-                }
-        
-            } 
-            
-            //Filtrado
-            if ((isset($_GET['field'])&&isset($_GET['value']))){
-                $field = $_GET['field'];
-                $value = $_GET['value'];
-                if (in_array($field, $fields)){
-                    if($field=='price'){
-                        $products = $this->model->getAllFilterLowerPrice($field, $value);
+                if((int)$_GET['limit'] <= $total){
+                    $limit = (int)$_GET['limit'];
+                    $pages = round($total/$limit);
+                    if ((int)$_GET['pag']<=$pages){
+                        $page = (int)$_GET['pag'];                     
+                        $offset = $limit * ($page-1);
                     } else {
-                        $products = $this->model->getAllFilter($field, $value);
+                        return $this->view->response("Las paginas existentes son $pages", 400);
                     }
                 } else {
-                    return $this->view->response("$field no es un campo existente en la tabla", 400);
+                        return $this->view->response("El limite debe ser menor a $total", 400);
                 }
             }
             
-            //Si no hay ningun criterio en el endpoint
-            if (empty($_GET['field'])&&empty($_GET['value'])&&empty($_GET['limit'])&&empty($_GET['pag'])&&empty($_GET['order'])&&empty($_GET['sort'])) {
-                $products = $this->model->getAll();
-            }
+            //Hago los llamados al modelo, en caso de que no haya entrado a los if anteriores, van los valores por defecto
+            if ($field!=null&&$value!=null)
+                if($field=='price')
+                    $products = $this->model->getAllFilterPrice($field, $value, $limit, $offset, $sort, $order);
+                else
+                    $products = $this->model->getAllFilter($field, $value, $limit, $offset, $sort, $order);
+            else 
+                $products = $this->model->getAll($limit, $offset, $sort, $order);
             
+            //Hago el llamado a la vista
             if ($products)
                 return $this->view->response($products);
             else 
@@ -96,6 +104,11 @@
         }
         
         function deleteProduct($params = null){
+            if(!$this->authHelper->isLoggedIn()){
+                $this->view->response("No estas logeado", 401);
+                return;
+            }
+    
             $id = $params[':ID'];
             $product = $this->model->get($id);
             if ($product) {
@@ -107,6 +120,11 @@
         }
         
         function insertProduct($params = null){
+            if(!$this->authHelper->isLoggedIn()){
+                $this->view->response("No estas logeado", 401);
+                return;
+            }
+    
             $product = $this->getData();
             if (empty($product->name)||empty($product->id_brand)||empty($product->description)||empty($product->price)){
                 $this->view->response("Complete los datos", 400);
@@ -118,6 +136,11 @@
         }
 
         function editProduct($params = null){
+            if(!$this->authHelper->isLoggedIn()){
+                $this->view->response("No estas logeado", 401);
+                return;
+            }
+    
             $id = $params[':ID'];
             $product = $this->model->get($id);
             if($product){
