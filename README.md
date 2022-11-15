@@ -104,13 +104,13 @@ Endpoint de la API : **http://localhost/TPE2-WEB2-2022/api/products**
     Los nuevos valores de los campos del producto 123 seran los siguientes:  
 
 
-    {
+    ```{
         "name": "Prueba PUT",
         "id_brand": 1,
         "description": "Descripcion editada",
         "price": 50,
         "sale": 0
-    }
+    }```
 
 ***
 
