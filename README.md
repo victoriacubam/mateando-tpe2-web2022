@@ -57,8 +57,6 @@ Endpoint de la API : **http://localhost/TPE2-WEB2-2022/api/products**
         ***Ejemplo*** `GET /products?field=sale&value=1`  
         Esta peticion traera todos los productos que se encuentren en oferta, es decir, todos aquellos que tengan true (1) en el campo sale.
 
-    - #### Aclaraciones de las funcionalidades anteriores
-    Lo detallado anteriormente (orden, filtro y paginacion) son funcionales unicamente en su uso individual, al combinarse se traera la lista de productos respetando el ultimo parametro especificado.
 
 - `GET /products/:ID`: Este endpoint permite acceder a un producto especifico de la tabla dado un id particular. En caso de que el id sea incorrecto, se producira un error `404 Not Found`. 
 
