@@ -54,6 +54,8 @@ Endpoint de la API : **http://localhost/TPE2-WEB2-2022/api/products**
 
         Estableciendo un campo de la tabla es posible filtrar por algun valor en especifico. Es necesario que el campo que se pasa por el Query Param sea uno existente en la tabla, de lo contrario surgira un error `400 Bad Request`. Y en el caso de que el valor que se busca filtrar no exista, ocurre un error `404 Not Found`. 
 
+        Si el campo que se esta filtrando es el *precio*, la consulta traera todos los registros que tengan un precio menor o igual al especificado en el query param.
+
         ***Ejemplo*** `GET /products?field=sale&value=1`  
         Esta peticion traera todos los productos que se encuentren en oferta, es decir, todos aquellos que tengan true (1) en el campo sale.
 

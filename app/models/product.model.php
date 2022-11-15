@@ -39,7 +39,7 @@ class ProductModel {
 
     //Orden, paginacion y filtro 
     function getAllFilterPrice($field, $value, $limit, $offset, $sort, $order){
-        $query = $this->db->prepare("SELECT * FROM products WHERE $field < ?  ORDER BY $sort $order LIMIT $offset, $limit");
+        $query = $this->db->prepare("SELECT * FROM products WHERE $field <= ?  ORDER BY $sort $order LIMIT $offset, $limit");
         $query->execute([$value]);
         
         $products = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de productos
