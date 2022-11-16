@@ -53,7 +53,7 @@ class AuthApiController {
             $payload = array(
                 'id' => $userDB->id,
                 'name' => $userDB->email,
-                'exp' => time()+60
+                'exp' => time()+120
             );
             $header = $this->authHelper->base64url_encode(json_encode($header));
             $payload = $this->authHelper->base64url_encode(json_encode($payload));
